@@ -1,3 +1,4 @@
+
 $("form").submit(function (e) {
     e.preventDefault();
 
@@ -30,4 +31,19 @@ $("form").submit(function (e) {
     $("#cabinet-resolution").html(cabinetResolution)
     $("#screen-area").html(screenArea)
     $("#lamp-type-res").html(lampType)
+
+    $("#download").click(function (){
+        print(screenArea,screenResolution,cabinetResolution,lampType)
+    })
 })
+
+function print(screenArea,screenResolution,cabinetResolution,lampType){
+    // Default export is a4 paper, portrait, using millimeters for units
+    const doc = new jsPDF();
+
+    doc.text("screen area: "+screenArea, 10, 10);
+    doc.text("screen resolution: "+screenResolution, 10, 20);
+    doc.text("cabinet resolution: "+cabinetResolution, 10, 30);
+    doc.text("lamp type: "+lampType, 10, 40);
+    doc.save("print.pdf");
+}
