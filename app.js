@@ -1,4 +1,3 @@
-
 $("form").submit(function (e) {
     e.preventDefault();
 
@@ -32,18 +31,45 @@ $("form").submit(function (e) {
     $("#screen-area").html(screenArea)
     $("#lamp-type-res").html(lampType)
 
-    $("#download").click(function (){
-        print(screenArea,screenResolution,cabinetResolution,lampType)
+    $("#download").click(function () {
+        print(screenArea, screenResolution, cabinetResolution, lampType)
     })
 })
 
-function print(screenArea,screenResolution,cabinetResolution,lampType){
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF();
+function print(screenArea, screenResolution, cabinetResolution, lampType) {
+    console.log(screenArea, screenResolution, cabinetResolution, lampType)
+    const dt = [{
+        "screen area": screenArea,
+        "screen resolution": screenResolution,
+        "cabinet resolution": cabinetResolution,
+        "lamp type": lampType,
+    }]
 
-    doc.text("screen area: "+screenArea, 10, 10);
-    doc.text("screen resolution: "+screenResolution, 10, 20);
-    doc.text("cabinet resolution: "+cabinetResolution, 10, 30);
-    doc.text("lamp type: "+lampType, 10, 40);
+
+    function createHeaders(keys) {
+        var result = [];
+        for (var i = 0; i < keys.length; i += 1) {
+            result.push({
+                id: keys[i],
+                name: keys[i],
+                prompt: keys[i],
+                width: 45,
+                align: "center",
+                padding: 0
+            });
+        }
+        return result;
+    }
+
+    var headers = createHeaders([
+        "screen area",
+        "screen resolution",
+        "cabinet resolution",
+        "lamp type"
+    ]);
+    console.log(dt)
+
+    var doc = new jsPDF({putOnlyUsedFonts: true, orientation: "landscape"});
+    doc.table(1, 1, dt, headers, {autoSize: true});
     doc.save("print.pdf");
 }
